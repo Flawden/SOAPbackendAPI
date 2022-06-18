@@ -28,10 +28,10 @@ public class UsersEndpoint {
     public GetUserResponse getCountry(@RequestPayload GetUserRequest request) {
         GetUserResponse response = new GetUserResponse();
         UserEntity user = userService.findByUsername(request.getName());
-        System.out.println(user + " IT'S USER!!!!!!");
         User xmlUser = new User();
+        System.out.println(user.getAuthorities() + "AUTHORITIES!!!");
         xmlUser.setPassword(user.getPassword());
-        xmlUser.setEmail(user.getEmail());
+        xmlUser.setLogin(user.getLogin());
         xmlUser.setUsername(user.getUsername());
         response.setUser(xmlUser);
         return response;

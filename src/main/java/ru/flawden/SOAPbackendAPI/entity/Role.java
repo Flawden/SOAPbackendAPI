@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.flawden.SOAPbackendAPI.entity.Permission.*;
+import static ru.flawden.SOAPbackendAPI.entity.Authority.*;
 
 public enum Role {
 
@@ -15,19 +15,19 @@ public enum Role {
     ANALYST(Sets.newHashSet(USER_READ, STATISTICS_READ, STATISTICS_WRITE)),
     ADMIN(Sets.newHashSet(USERSLIST_READ, USERSLIST_WRITE, STATISTICS_WRITE, STATISTICS_READ));
 
-    private final Set<Permission> permissions;
+    private final Set<Authority> authorities;
 
-    Role(Set<Permission> permissions) {
-        this.permissions = permissions;
+    Role(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
     public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
-        Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+        Set<SimpleGrantedAuthority> permissions = getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
                 .collect(Collectors.toSet());
         permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return permissions;

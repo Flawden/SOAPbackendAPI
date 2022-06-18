@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,11 +18,11 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @Column(name = "username")
+    @Column(name = "username")
     private String username;
-//    @Column(name = "email")
-    private String email;
-//    @Column(name = "password")
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -30,7 +31,9 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<Authority> authorities = new HashSet<Authority>();
+        roles.stream().forEach(role -> role.getAuthorities().stream().forEach(authority -> authorities.add(authority)));
+        return authorities;
     }
 
     @Override
