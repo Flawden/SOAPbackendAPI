@@ -1,8 +1,5 @@
 package ru.flawden.SOAPbackendAPI.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.flawden.SOAPbackendAPI.entity.Role;
 import ru.flawden.SOAPbackendAPI.entity.UserEntity;
@@ -12,7 +9,7 @@ import ru.flawden.soapbackendapi.entity.EditUserRequest;
 import java.util.*;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
 
@@ -20,17 +17,12 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public UserEntity findByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByLogin(username);
     }
 
-    public UserEntity findByUsernameAndPassword(String username, String password) throws UsernameNotFoundException {
-        return userRepository.findByUsernameAndPassword(username, password);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+    public UserEntity findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByLoginAndPassword(username, password);
     }
 
     public List<UserEntity> findAll() {
@@ -42,17 +34,17 @@ public class UserService implements UserDetailsService {
     }
 
     public void delete(String login) {
-        UserEntity user = userRepository.findByUsername(login);
+        UserEntity user = userRepository.findByLogin(login);
         userRepository.delete(user);
     }
 
     public void edit(EditUserRequest userForEdit) {
-        UserEntity user = userRepository.findByUsername(userForEdit.getCurrentLogin());
+        UserEntity user = userRepository.findByLogin(userForEdit.getCurrentLogin());
         if(userForEdit.getNewName() != null) {
             user.setName(userForEdit.getNewName());
         }
         if(userForEdit.getNewLogin() != null) {
-            user.setUsername(userForEdit.getNewLogin());
+            user.setLogin(userForEdit.getNewLogin());
         }
         if(userForEdit.getNewPassword() != null) {
             user.setPassword(userForEdit.getNewPassword());

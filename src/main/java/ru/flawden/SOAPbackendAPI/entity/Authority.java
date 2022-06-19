@@ -1,8 +1,6 @@
 package ru.flawden.SOAPbackendAPI.entity;
 
-import org.springframework.security.core.GrantedAuthority;
-
-public enum Authority implements GrantedAuthority {
+public enum Authority {
 
     STATISTICS_READ("statistics:read"),
     STATISTICS_WRITE("statistics:write"),
@@ -11,14 +9,10 @@ public enum Authority implements GrantedAuthority {
     USER_READ("user:read"),
     USER_WRITE("user:write");
 
-    private final String authorities;
+    private final String permission;
 
     Authority(String permission) {
-        this.authorities = permission;
+        this.permission = permission;
     }
 
-    @Override
-    public String getAuthority() {
-        return authorities;
-    }
 }

@@ -34,7 +34,7 @@ public class UsersEndpoint {
         UserEntity user = userService.findByUsernameAndPassword(request.getName(), request.getPassword());
         User xmlUser = new User();
         xmlUser.setPassword(user.getPassword());
-        xmlUser.setLogin(user.getUsername());
+        xmlUser.setLogin(user.getLogin());
         xmlUser.setName(user.getName());
         for (Role role: user.getRoles()) {
             xmlUser.getRole().add(role.name());
@@ -52,11 +52,10 @@ public class UsersEndpoint {
         for(UserEntity user: users) {
             User xmlUser = new User();
             xmlUser.setPassword(user.getPassword());
-            xmlUser.setLogin(user.getUsername());
+            xmlUser.setLogin(user.getLogin());
             xmlUser.setName(user.getName());
             response.getUser().add(xmlUser);
         }
-
         return response;
     }
 
@@ -66,7 +65,7 @@ public class UsersEndpoint {
         RegisterUserResponse response = new RegisterUserResponse();
 
         UserEntity user = new UserEntity();
-        user.setUsername(request.getLogin());
+        user.setLogin(request.getLogin());
         user.setPassword(request.getPassword());
         user.setName(request.getName());
 

@@ -5,6 +5,6 @@ import ru.flawden.SOAPbackendAPI.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    UserEntity findByUsername(String username);
-    UserEntity findByUsernameAndPassword(String username, String password);
+    UserEntity findByLogin(String login);
+    UserEntity findByLoginAndPassword(String username, String password);
 }

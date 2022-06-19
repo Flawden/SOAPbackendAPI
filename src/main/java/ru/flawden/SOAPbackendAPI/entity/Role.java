@@ -1,10 +1,7 @@
 package ru.flawden.SOAPbackendAPI.entity;
 
 import com.google.common.collect.Sets;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static ru.flawden.SOAPbackendAPI.entity.Authority.*;
 
@@ -25,11 +22,4 @@ public enum Role {
         return authorities;
     }
 
-    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
-        Set<SimpleGrantedAuthority> permissions = getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .collect(Collectors.toSet());
-        permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-        return permissions;
-    }
 }
