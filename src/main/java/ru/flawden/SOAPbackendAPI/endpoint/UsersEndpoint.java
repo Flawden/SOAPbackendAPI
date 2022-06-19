@@ -89,6 +89,15 @@ public class UsersEndpoint {
         return response;
     }
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "editUserRequest")
+    @ResponsePayload
+    public EditUserResponse editUser(@RequestPayload EditUserRequest request) {
+        EditUserResponse response = new EditUserResponse();
+        userService.edit(request);
+        response.setResult("Success");
+
+        return response;
+    }
 
 
 }

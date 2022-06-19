@@ -69,6 +69,26 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="editUserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="currentLogin" type="xs:string"/>
+                <xs:element name="newName" type="xs:string"/>
+                <xs:element name="newLogin" type="xs:string"/>
+                <xs:element name="newPassword" type="xs:string"/>
+                <xs:element name="newRole" maxOccurs="unbounded" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="editUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="result" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="user">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>

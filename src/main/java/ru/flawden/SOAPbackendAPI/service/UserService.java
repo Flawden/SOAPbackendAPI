@@ -4,12 +4,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.flawden.SOAPbackendAPI.entity.Role;
 import ru.flawden.SOAPbackendAPI.entity.UserEntity;
 import ru.flawden.SOAPbackendAPI.repository.UserRepository;
+import ru.flawden.soapbackendapi.entity.EditUserRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -44,5 +44,29 @@ public class UserService implements UserDetailsService {
     public void delete(String login) {
         UserEntity user = userRepository.findByUsername(login);
         userRepository.delete(user);
+    }
+
+    public void edit(EditUserRequest userForEdit) {
+        UserEntity user = userRepository.findByUsername(userForEdit.getCurrentLogin());
+        if(userForEdit.getNewName() != null) {
+            user.setName(userForEdit.getNewName());
+        }
+        if(userForEdit.getNewLogin() != null) {
+            user.setUsername(userForEdit.getNewLogin());
+        }
+        if(userForEdit.getNewPassword() != null) {
+            user.setPassword(userForEdit.getNewPassword());
+        }
+
+        if (userForEdit.getNewRole() != null && userForEdit.getNewRole().size() > 0) {
+            List<String> rolesForEdit = userForEdit.getNewRole();
+            Set<Role> roles = new HashSet<>();
+            for (String userRole: rolesForEdit) {
+                roles.add(Role.valueOf(userRole));
+            }
+            user.setRoles(roles);
+        }
+
+        userRepository.save(user);
     }
 }
