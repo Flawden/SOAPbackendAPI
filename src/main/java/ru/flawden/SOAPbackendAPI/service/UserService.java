@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.flawden.SOAPbackendAPI.entity.Role;
 import ru.flawden.SOAPbackendAPI.entity.UserEntity;
 import ru.flawden.SOAPbackendAPI.repository.UserRepository;
+import ru.flawden.SOAPbackendAPI.util.ValidationUtil;
 import ru.flawden.soapbackendapi.entity.EditUserRequest;
 import ru.flawden.soapbackendapi.entity.RegisterUserRequest;
 import ru.flawden.soapbackendapi.entity.User;
@@ -14,9 +15,11 @@ import java.util.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ValidationUtil validationUtil;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ValidationUtil validationUtil) {
         this.userRepository = userRepository;
+        this.validationUtil = validationUtil;
     }
 
     public UserEntity findByUsernameAndPassword(String username, String password) {
@@ -33,9 +36,11 @@ public class UserService {
         user.setPassword(request.getPassword());
         user.setName(request.getName());
 
+        validationUtil.registrationValidation(user);
+
         Set<Role> roles = new HashSet<>();
         for (String userRole: request.getRole()) {
-            roles.add(Role.valueOf(userRole));
+            roles.add(Role.valueOf(userRole.toUpperCase(Locale.ROOT)));
         }
         user.setRoles(roles);
         userRepository.save(user);
