@@ -16,12 +16,10 @@ import java.util.Set;
 public class UserEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "username")
-    private String username;
     @Column(name = "login")
-    private String login;
+    private String username;
+    @Column(name = "name")
+    private String name;
     @Column(name = "password")
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

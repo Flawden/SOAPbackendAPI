@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import ru.flawden.SOAPbackendAPI.entity.UserEntity;
 import ru.flawden.SOAPbackendAPI.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -20,8 +24,25 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public UserEntity findByUsernameAndPassword(String username, String password) throws UsernameNotFoundException {
+        return userRepository.findByUsernameAndPassword(username, password);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void save(UserEntity user) {
+        userRepository.save(user);
+    }
+
+    public void delete(String login) {
+        UserEntity user = userRepository.findByUsername(login);
+        userRepository.delete(user);
     }
 }
