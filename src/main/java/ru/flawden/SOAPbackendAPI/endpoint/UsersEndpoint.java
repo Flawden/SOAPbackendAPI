@@ -31,7 +31,7 @@ public class UsersEndpoint {
     @ResponsePayload
     public GetUserResponse getUser(@RequestPayload GetUserRequest request) {
         GetUserResponse response = new GetUserResponse();
-        UserEntity user = userService.findByUsernameAndPassword(request.getName(), request.getPassword());
+        UserEntity user = userService.findByLoginAndPassword(request.getName(), request.getPassword());
         response.setUser(userService.convertUserToXMLUser(user, true));
         return response;
     }
@@ -51,6 +51,7 @@ public class UsersEndpoint {
     public RegisterUserResponse registerUser(@RequestPayload RegisterUserRequest request) {
         RegisterUserResponse response = new RegisterUserResponse();
         userService.saveUser(request);
+        response.setSuccess("True");
         return response;
     }
 
@@ -59,7 +60,7 @@ public class UsersEndpoint {
     public DeleteUserResponse deleteUser(@RequestPayload DeleteUserRequest request) {
         DeleteUserResponse response = new DeleteUserResponse();
         userService.delete(request.getLogin());
-        response.setResult("Success");
+        response.setSuccess("True");
         return response;
     }
 
@@ -68,7 +69,7 @@ public class UsersEndpoint {
     public EditUserResponse editUser(@RequestPayload EditUserRequest request) {
         EditUserResponse response = new EditUserResponse();
         userService.edit(request);
-        response.setResult("Success");
+        response.setSuccess("True");
         return response;
     }
 }

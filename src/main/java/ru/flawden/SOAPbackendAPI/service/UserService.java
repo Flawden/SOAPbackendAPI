@@ -22,8 +22,10 @@ public class UserService {
         this.validationUtil = validationUtil;
     }
 
-    public UserEntity findByUsernameAndPassword(String username, String password) {
-        return userRepository.findByLoginAndPassword(username, password);
+    public UserEntity findByLoginAndPassword(String login, String password) {
+        validationUtil.validatePassword(password);
+        validationUtil.validateLogin(login);
+        return userRepository.findByLoginAndPassword(login, password);
     }
 
     public List<UserEntity> findAll() {
@@ -54,12 +56,15 @@ public class UserService {
     public void edit(EditUserRequest userForEdit) {
         UserEntity user = userRepository.findByLogin(userForEdit.getCurrentLogin());
         if (userForEdit.getNewName() != null) {
+            validationUtil.validateName(userForEdit.getNewName());
             user.setName(userForEdit.getNewName());
         }
         if (userForEdit.getNewLogin() != null) {
+            validationUtil.validateLogin(userForEdit.getNewLogin());
             user.setLogin(userForEdit.getNewLogin());
         }
         if (userForEdit.getNewPassword() != null) {
+            validationUtil.validatePassword(userForEdit.getNewPassword());
             user.setPassword(userForEdit.getNewPassword());
         }
         if (userForEdit.getNewRole() != null && userForEdit.getNewRole().size() > 0) {

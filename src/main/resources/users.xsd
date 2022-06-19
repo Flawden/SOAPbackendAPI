@@ -48,7 +48,7 @@
     <xs:element name="registerUserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="user" maxOccurs="unbounded" type="tns:user"/>
+                <xs:element name="Success" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -64,7 +64,7 @@
     <xs:element name="deleteUserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="result" type="xs:string"/>
+                <xs:element name="Success" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -84,7 +84,7 @@
     <xs:element name="editUserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="result" type="xs:string"/>
+                <xs:element name="Success" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
