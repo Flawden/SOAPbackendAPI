@@ -6,7 +6,6 @@ import java.util.Set;
 import static ru.flawden.SOAPbackendAPI.entity.Authority.*;
 
 public enum Role {
-
     USER(Sets.newHashSet(USER_READ)),
     OPERATOR(Sets.newHashSet(USER_READ, USER_WRITE)),
     ANALYST(Sets.newHashSet(USER_READ, STATISTICS_READ, STATISTICS_WRITE)),

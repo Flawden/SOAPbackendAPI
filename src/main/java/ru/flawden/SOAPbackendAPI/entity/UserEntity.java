@@ -23,7 +23,6 @@ public class UserEntity {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
     public Set<Authority> getAuthorities() {
         Set<Authority> authorities = new HashSet<Authority>();
         roles.stream().forEach(role -> role.getAuthorities().stream().forEach(authority -> authorities.add(authority)));

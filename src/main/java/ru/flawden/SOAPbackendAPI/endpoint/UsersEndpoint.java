@@ -32,14 +32,7 @@ public class UsersEndpoint {
     public GetUserResponse getUser(@RequestPayload GetUserRequest request) {
         GetUserResponse response = new GetUserResponse();
         UserEntity user = userService.findByUsernameAndPassword(request.getName(), request.getPassword());
-        User xmlUser = new User();
-        xmlUser.setPassword(user.getPassword());
-        xmlUser.setLogin(user.getLogin());
-        xmlUser.setName(user.getName());
-        for (Role role: user.getRoles()) {
-            xmlUser.getRole().add(role.name());
-        }
-        response.setUser(xmlUser);
+        response.setUser(userService.convertUserToXMLUser(user, true));
         return response;
     }
 
@@ -48,14 +41,8 @@ public class UsersEndpoint {
     public GetAllUsersResponse getAllUsers(@RequestPayload GetAllUsersRequest request) {
         GetAllUsersResponse response = new GetAllUsersResponse();
         List<UserEntity> users = userService.findAll();
-        List<User> xmlUsers = new ArrayList<>();
-        for(UserEntity user: users) {
-            User xmlUser = new User();
-            xmlUser.setPassword(user.getPassword());
-            xmlUser.setLogin(user.getLogin());
-            xmlUser.setName(user.getName());
-            response.getUser().add(xmlUser);
-        }
+        users.stream().forEach(user -> response.getUser()
+                .add(userService.convertUserToXMLUser(user, false)));
         return response;
     }
 
@@ -63,18 +50,7 @@ public class UsersEndpoint {
     @ResponsePayload
     public RegisterUserResponse registerUser(@RequestPayload RegisterUserRequest request) {
         RegisterUserResponse response = new RegisterUserResponse();
-
-        UserEntity user = new UserEntity();
-        user.setLogin(request.getLogin());
-        user.setPassword(request.getPassword());
-        user.setName(request.getName());
-
-        Set<Role> roles = new HashSet<>();
-        for (String userRole: request.getRole()) {
-            roles.add(Role.valueOf(userRole));
-        }
-        user.setRoles(roles);
-        userService.save(user);
+        userService.saveUser(request);
         return response;
     }
 
@@ -84,7 +60,6 @@ public class UsersEndpoint {
         DeleteUserResponse response = new DeleteUserResponse();
         userService.delete(request.getLogin());
         response.setResult("Success");
-
         return response;
     }
 
@@ -94,9 +69,6 @@ public class UsersEndpoint {
         EditUserResponse response = new EditUserResponse();
         userService.edit(request);
         response.setResult("Success");
-
         return response;
     }
-
-
 }

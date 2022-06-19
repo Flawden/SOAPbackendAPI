@@ -1,7 +1,6 @@
 package ru.flawden.SOAPbackendAPI.entity;
 
 public enum Authority {
-
     STATISTICS_READ("statistics:read"),
     STATISTICS_WRITE("statistics:write"),
     USERSLIST_READ("users:read"),
