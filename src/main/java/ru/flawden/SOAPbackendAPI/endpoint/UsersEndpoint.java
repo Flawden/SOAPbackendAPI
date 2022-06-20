@@ -48,28 +48,42 @@ public class UsersEndpoint {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "registerUserRequest")
     @ResponsePayload
-    public RegisterUserResponse registerUser(@RequestPayload RegisterUserRequest request) {
-        RegisterUserResponse response = new RegisterUserResponse();
-        userService.saveUser(request);
-        response.setSuccess("True");
-        return response;
+    public SuccessResponse registerUser(@RequestPayload RegisterUserRequest request) {
+        SuccessResponse response = new SuccessResponse();
+        userService.saveUser(request, response);
+        if(response.getErrors().size() > 0) {
+            response.setSuccess("False");
+            return response;
+        } else {
+            response.setSuccess("True");
+            return response;
+        }
+
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteUserRequest")
     @ResponsePayload
-    public DeleteUserResponse deleteUser(@RequestPayload DeleteUserRequest request) {
-        DeleteUserResponse response = new DeleteUserResponse();
-        userService.delete(request.getLogin());
-        response.setSuccess("True");
+    public SuccessResponse deleteUser(@RequestPayload DeleteUserRequest request) {
+        SuccessResponse response = new SuccessResponse();
+        userService.delete(request.getLogin(), response);
+        if (response.getErrors() == null || response.getErrors().size() < 1) {
+            response.setSuccess("True");
+        } else {
+            response.setSuccess("False");
+        }
         return response;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "editUserRequest")
     @ResponsePayload
-    public EditUserResponse editUser(@RequestPayload EditUserRequest request) {
-        EditUserResponse response = new EditUserResponse();
-        userService.edit(request);
-        response.setSuccess("True");
+    public SuccessResponse editUser(@RequestPayload EditUserRequest request) {
+        SuccessResponse response = new SuccessResponse();
+        userService.edit(request, response);
+        if (response.getErrors() == null || response.getErrors().size() < 1) {
+            response.setSuccess("True");
+        } else {
+            response.setSuccess("False");
+        }
         return response;
     }
 }

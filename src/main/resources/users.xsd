@@ -45,26 +45,10 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="registerUserResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Success" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="deleteUserRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="login" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="deleteUserResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Success" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -81,10 +65,11 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="editUserResponse">
+    <xs:element name="SuccessResponse">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="Success" type="xs:string"/>
+                <xs:element name="Errors" maxOccurs="unbounded" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
