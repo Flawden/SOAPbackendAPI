@@ -9,8 +9,8 @@ ____
 
 1. [Features](#Features)
 2. [Getting started](#Getting-started)
-   2.1 [Launch via Intellij idea](#Launch-via-Intellij-idea)
-   2.2 [Building a project with Maven](#Building-a-project-with-Maven)
+   1. [Launch via Intellij idea](#Launch-via-Intellij-idea)
+   2. [Building a project with Maven](#Building-a-project-with-Maven)
 3. [Application Interaction](#Application-Interaction)
 
 ## Features

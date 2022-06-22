@@ -5,7 +5,6 @@ import ru.flawden.soapbackendapi.entity.Role;
 import ru.flawden.soapbackendapi.entity.UserEntity;
 import ru.flawden.soapbackendapi.exception.UserDoesNotExistException;
 import ru.flawden.soapbackendapi.exception.UserIsAlreadyExists;
-import ru.flawden.soapbackendapi.exception.ValidationException;
 import ru.flawden.soapbackendapi.repository.UserRepository;
 import ru.flawden.soapbackendapi.schema.*;
 import ru.flawden.soapbackendapi.util.ValidationUtil;
