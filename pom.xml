@@ -6,12 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>ru.flawden</groupId>
 	<artifactId>SOAP-backend-API</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SOAP-backend-API</name>
+	<packaging>jar</packaging>
 	<description>Backend API for managing users and their roles.</description>
 	<properties>
 		<java.version>17</java.version>
@@ -27,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web-services</artifactId>
 		</dependency>
 		<dependency>
@@ -34,7 +40,6 @@
 			<artifactId>wsdl4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -50,7 +55,6 @@
 			<artifactId>guava</artifactId>
 			<version>31.1-jre</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -87,5 +91,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -1,10 +1,10 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://flawden.ru/SoapBackendApi/entity"
-           targetNamespace="http://flawden.ru/SoapBackendApi/entity" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://flawden.ru/soapbackendapi/schema"
+           targetNamespace="http://flawden.ru/soapbackendapi/schema" elementFormDefault="qualified">
 
     <xs:element name="getUserRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="name" type="xs:string"/>
+                <xs:element name="login" type="xs:string"/>
                 <xs:element name="password" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
