@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.flawden.soapbackendapi.entity.Role;
 import ru.flawden.soapbackendapi.entity.UserEntity;
 import ru.flawden.soapbackendapi.exception.UserDoesNotExistException;
+import ru.flawden.soapbackendapi.exception.UserIsAlreadyExists;
 import ru.flawden.soapbackendapi.exception.ValidationException;
 import ru.flawden.soapbackendapi.repository.UserRepository;
 import ru.flawden.soapbackendapi.schema.*;
@@ -39,6 +40,11 @@ public class UserService {
     }
 
     public void saveUser(RegisterUserRequest request, SuccessResponse response) {
+
+        if(!(userRepository.findByLogin(request.getLogin()) == null)) {
+            throw new UserIsAlreadyExists("User with login \"" + request.getLogin() + "\" already exists");
+        }
+
         UserEntity user = new UserEntity();
         user.setLogin(request.getLogin());
         user.setPassword(request.getPassword());
