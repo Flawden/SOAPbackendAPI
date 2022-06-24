@@ -10,6 +10,7 @@ import ru.flawden.soapbackendapi.service.UserService;
 import ru.flawden.soapbackendapi.schema.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Endpoint
 public class UsersEndpoint {
@@ -46,8 +47,17 @@ public class UsersEndpoint {
     @ResponsePayload
     public SuccessResponse registerUser(@RequestPayload RegisterUserRequest request) {
         SuccessResponse response = new SuccessResponse();
-        userService.saveUser(request, response);
-        if(response.getErrors().size() > 0) {
+
+        UserEntity user = new UserEntity();
+        user.setLogin(request.getLogin());
+        user.setPassword(request.getPassword());
+        user.setName(request.getName());
+        Set<String> roles = Set.copyOf(request.getRole());
+
+        List<String> errors = userService.saveUser(user, roles);
+
+        if(errors.size() > 0) {
+            response.getErrors().addAll(errors);
             response.setSuccess("False");
             return response;
         } else {
@@ -61,10 +71,11 @@ public class UsersEndpoint {
     @ResponsePayload
     public SuccessResponse deleteUser(@RequestPayload DeleteUserRequest request) {
         SuccessResponse response = new SuccessResponse();
-        userService.delete(request.getLogin(), response);
-        if (response.getErrors() == null || response.getErrors().size() < 1) {
+        List<String> errors = userService.delete(request.getLogin());
+        if (errors == null || errors.size() < 1) {
             response.setSuccess("True");
         } else {
+            response.getErrors().addAll(errors);
             response.setSuccess("False");
         }
         return response;
@@ -74,10 +85,18 @@ public class UsersEndpoint {
     @ResponsePayload
     public SuccessResponse editUser(@RequestPayload EditUserRequest request) {
         SuccessResponse response = new SuccessResponse();
-        userService.edit(request, response);
-        if (response.getErrors() == null || response.getErrors().size() < 1) {
+
+        UserEntity user = new UserEntity();
+        user.setPassword(request.getNewPassword());
+        user.setName(request.getNewName());
+        Set<String> roles = Set.copyOf(request.getNewRole());
+        String login = request.getCurrentLogin();
+
+        List<String> errors = userService.edit(user, login, roles);
+        if (errors == null || errors.size() < 1) {
             response.setSuccess("True");
         } else {
+            response.getErrors().addAll(errors);
             response.setSuccess("False");
         }
         return response;
