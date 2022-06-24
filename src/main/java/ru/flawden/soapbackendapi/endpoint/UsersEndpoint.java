@@ -87,9 +87,9 @@ public class UsersEndpoint {
         SuccessResponse response = new SuccessResponse();
 
         UserEntity user = new UserEntity();
-        user.setPassword(request.getNewPassword());
-        user.setName(request.getNewName());
-        Set<String> roles = Set.copyOf(request.getNewRole());
+        user.setPassword(request.getPassword());
+        user.setName(request.getName());
+        Set<String> roles = Set.copyOf(request.getRole());
         String login = request.getCurrentLogin();
 
         List<String> errors = userService.edit(user, login, roles);
