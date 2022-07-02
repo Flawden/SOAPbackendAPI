@@ -9,8 +9,8 @@ import ru.flawden.soapbackendapi.entity.*;
 import ru.flawden.soapbackendapi.service.UserService;
 import ru.flawden.soapbackendapi.schema.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Endpoint
 public class UsersEndpoint {
@@ -48,16 +48,11 @@ public class UsersEndpoint {
     public SuccessResponse registerUser(@RequestPayload RegisterUserRequest request) {
         SuccessResponse response = new SuccessResponse();
 
-        UserEntity user = new UserEntity();
-        user.setLogin(request.getLogin());
-        user.setPassword(request.getPassword());
-        user.setName(request.getName());
-        Set<String> roles = Set.copyOf(request.getRole());
-
-        List<String> errors = userService.saveUser(user, roles);
+        List<ErrorMessage> errors = new ArrayList<>();
+        userService.saveUser(request, errors);
 
         if(errors.size() > 0) {
-            response.getErrors().addAll(errors);
+            errors.forEach(error -> response.getErrors().add(error.getError()));
             response.setSuccess("False");
             return response;
         } else {
@@ -86,18 +81,13 @@ public class UsersEndpoint {
     public SuccessResponse editUser(@RequestPayload EditUserRequest request) {
         SuccessResponse response = new SuccessResponse();
 
-        UserEntity user = new UserEntity();
-        user.setPassword(request.getPassword());
-        user.setName(request.getName());
-        Set<String> roles = Set.copyOf(request.getRole());
-        String login = request.getCurrentLogin();
-
-        List<String> errors = userService.edit(user, login, roles);
-        if (errors == null || errors.size() < 1) {
-            response.setSuccess("True");
-        } else {
-            response.getErrors().addAll(errors);
+        List<ErrorMessage> errors = new ArrayList<>();
+        userService.edit(request, errors);
+        if (errors.size() > 0) {
+            errors.forEach(error -> response.getErrors().add(error.getError()));
             response.setSuccess("False");
+        } else {
+            response.setSuccess("True");
         }
         return response;
     }

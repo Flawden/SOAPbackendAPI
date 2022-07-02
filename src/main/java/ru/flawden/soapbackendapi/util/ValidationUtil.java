@@ -1,6 +1,7 @@
 package ru.flawden.soapbackendapi.util;
 
 import org.springframework.stereotype.Component;
+import ru.flawden.soapbackendapi.entity.ErrorMessage;
 import ru.flawden.soapbackendapi.entity.UserEntity;
 import ru.flawden.soapbackendapi.exception.ValidationException;
 import ru.flawden.soapbackendapi.schema.SuccessResponse;
@@ -58,44 +59,44 @@ public class ValidationUtil {
         return true;
     }
 
-    public void registrationValidation(UserEntity user, List<String> errors) {
+    public void registrationValidation(UserEntity user, List<ErrorMessage> errors) {
          validateLogin(user.getLogin(), errors);
          validateName(user.getName(), errors);
          validatePassword(user.getPassword(), errors);
     }
 
-    public boolean validateLogin(String login, List<String> errors) {
+    public boolean validateLogin(String login, List<ErrorMessage> errors) {
         if(login == null) {
-            errors.add("Parameter \\\"login\\\" was not received");
+            errors.add(new ErrorMessage("Parameter \\\"login\\\" was not received"));
         }
         if (!login.matches("^[a-zA-Z][a-zA-Z0-9-_\\.]{6,20}$")) {
-            errors.add("Login must contain from 6 to 20 characters of the Latin " +
-                    "alphabet and begin with a letter");
+            errors.add(new ErrorMessage("Login must contain from 6 to 20 characters of the Latin " +
+                    "alphabet and begin with a letter"));
         }
         return true;
     }
 
-    public void validateName(String name, List<String> errors) {
+    public void validateName(String name, List<ErrorMessage> errors) {
         if (name == null) {
-            errors.add("Parameter \\\"name\\\" was not received");
+            errors.add(new ErrorMessage("Parameter \\\"name\\\" was not received"));
         }
         if (name.length() < 2) {
-            errors.add("The name must contain at least 2 characters");
+            errors.add(new ErrorMessage("The name must contain at least 2 characters"));
         }
         if (!name.matches("[A-Za-z]+")) {
-            errors.add("The name can only contain Latin characters");
+            errors.add(new ErrorMessage("The name can only contain Latin characters"));
         }
     }
 
-    public void validatePassword(String password, List<String> errors) {
+    public void validatePassword(String password, List<ErrorMessage> errors) {
         if(password == null) {
-            errors.add("Parameter \"password\" was not received");
+            errors.add(new ErrorMessage("Parameter \"password\" was not received"));
         }
         if (password.length() < 6)  {
-            errors.add("Your password must be more than 6 characters");
+            errors.add(new ErrorMessage("Your password must be more than 6 characters"));
         }
         if (!password.matches("^(?=.*[a-zа-яё])(?=.*[A-ZА-ЯЁ])(?=.*\\d)[a-zA-ZА-ЯЁа-яё\\d]+")) {
-            errors.add("Password must contain one capital letter and one number");
+            errors.add(new ErrorMessage("Password must contain one capital letter and one number"));
         }
     }
 

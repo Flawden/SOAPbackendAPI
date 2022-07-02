@@ -1,9 +1,9 @@
 package ru.flawden.soapbackendapi.service;
 
 import org.springframework.stereotype.Service;
+import ru.flawden.soapbackendapi.entity.ErrorMessage;
 import ru.flawden.soapbackendapi.entity.Role;
 import ru.flawden.soapbackendapi.entity.UserEntity;
-import ru.flawden.soapbackendapi.exception.RolesListIsEmptyException;
 import ru.flawden.soapbackendapi.exception.UserDoesNotExistException;
 import ru.flawden.soapbackendapi.exception.UserIsAlreadyExists;
 import ru.flawden.soapbackendapi.repository.UserRepository;
@@ -39,23 +39,25 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<String> saveUser(UserEntity user, Set<String> rolesList) {
+    public void saveUser(RegisterUserRequest request, List<ErrorMessage> errors) {
 
-        ArrayList<String> errors = new ArrayList<>();
+        UserEntity user = new UserEntity();
+        user.setLogin(request.getLogin());
+        user.setPassword(request.getPassword());
+        user.setName(request.getName());
+        Set<String> rolesList = Set.copyOf(request.getRole());
 
         if(rolesList.isEmpty()) {
-            errors.add("The list of roles cannot be empty");
-            return errors;
+            errors.add(new ErrorMessage("The list of roles cannot be empty"));
         }
         if(userRepository.findByLogin(user.getLogin()) != null) {
-            errors.add("User with login \"" + user.getLogin() + "\" already exists");
-            return errors;
+            errors.add(new ErrorMessage("User with login \"" + user.getLogin() + "\" already exists"));
         }
 
         validationUtil.registrationValidation(user, errors);
 
-        if (errors.size() > 1) {
-            return errors;
+        if (errors.size() > 0) {
+            return;
         }
 
         Set<Role> roles = new HashSet<>();
@@ -63,8 +65,8 @@ public class UserService {
             try{
                 roles.add(Role.valueOf(role.toUpperCase(Locale.ROOT)));
             } catch (IllegalArgumentException e) {
-                errors.add("The role value \"" + role + "\" is not in " +
-                        "the list of possible roles. Check spelling");
+                errors.add(new ErrorMessage("The role value \"" + role + "\" is not in " +
+                        "the list of possible roles. Check spelling"));
             }
         }
 
@@ -72,8 +74,6 @@ public class UserService {
             user.setRoles(roles);
             userRepository.save(user);
         }
-
-        return errors;
     }
 
     public List<String> delete(String login) {
@@ -88,13 +88,17 @@ public class UserService {
         return errors;
     }
 
-    public List<String> edit(UserEntity userForEdit, String login, Set<String> rolesForEdit) {
-        UserEntity user = userRepository.findByLogin(login);;
+    public void edit(EditUserRequest request, List<ErrorMessage> errors) {
+        UserEntity userForEdit = new UserEntity();
+        userForEdit.setPassword(request.getPassword());
+        userForEdit.setName(request.getName());
+        Set<String> rolesForEdit = Set.copyOf(request.getRole());
+        String login = request.getCurrentLogin();
+
+        UserEntity user = userRepository.findByLogin(login);
         if(user == null) {
             throw new UserIsAlreadyExists("User with login \"" + login + "\" does not exist");
         }
-
-        ArrayList<String> errors = new ArrayList<>();
         if (userForEdit.getName() != null) {
             validationUtil.validateName(userForEdit.getName(), errors);
             user.setName(user.getName());
@@ -114,8 +118,8 @@ public class UserService {
                 try{
                     roles.add(Role.valueOf(userRole.toUpperCase(Locale.ROOT)));
                 } catch (IllegalArgumentException e) {
-                    errors.add("The role value \"" + userRole + "\" is not in " +
-                            "the list of possible roles. Check spelling");
+                    errors.add(new ErrorMessage("The role value \"" + userRole + "\" is not in " +
+                            "the list of possible roles. Check spelling"));
                 }
             }
             if (roles.size() > 0) {
@@ -125,7 +129,6 @@ public class UserService {
         if (errors.size() < 1) {
             userRepository.save(user);
         }
-        return errors;
     }
 
     public User convertUserToXMLUser(UserEntity user, boolean isRoleNeeded) {
